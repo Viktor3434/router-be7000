@@ -42,3 +42,19 @@ after you see the message "Setup completed successfully!"
 1. Run: `cd /mnt/.../mi_docker/files && docker-compose up -d`
 2. Configure browser to use PAC: `http://${ROUTER_IP}:8888/proxy.pac`
 3. Check logs: `docker-compose logs`
+
+# Conceptually about what it is
+
+```
+Client Device
+↓
+[Browser/App] → HTTP/HTTPS Request
+↓
+┌─────────────────────────────────────────────────────┐
+│ Xiaomi BE7000 Router                                │
+│ ┌─────────┐   ┌─────────────┐   ┌─────────────┐     │
+│ │  Nginx  │ → │   Privoxy   │ → │   ByeDPI    │ →  Internet 
+│ │  (PAC)  │   │ (HTTP Proxy)│   │  (Socks5)   │     │
+│ └─────────┘   └─────────────┘   └─────────────┘     │
+└─────────────────────────────────────────────────────┘
+```
