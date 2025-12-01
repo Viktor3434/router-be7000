@@ -1,0 +1,51 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    healthcheck:
+      test: ["CMD", "sh", "-c", "curl -f http://localhost/proxy.pac || exit 1"]
+      interval: 20s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+    ports:
+      - "{{ AUTOCONF_PORT }}:80"
+    volumes:
+      - {{ FILES_DIR }}/nginx-proxy.pac:/usr/share/nginx/html/proxy.pac:ro
+      - {{ FILES_DIR }}/nginx-pac.conf:/etc/nginx/nginx.conf:ro
+    restart: unless-stopped
+
+  privoxy:
+    image: xorguy/privoxy-arm64
+    container_name: privoxy
+    network_mode: host
+    user: "privoxy:privoxy"
+    entrypoint: sh
+    command: -c "privoxy --no-daemon /etc/privoxy/config.used"
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget --proxy=http://localhost:{{ HTTP_PROXY_PORT }} --timeout=10 -q -O - https://www.google.com > /dev/null || exit 1"]
+      interval: 40s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+    volumes:
+      - {{ FILES_DIR }}/privoxy.conf:/etc/privoxy/config.used:ro
+    restart: unless-stopped
+
+  byedpi:
+    image: tazihad/byedpi:v0.17.3
+    container_name: byedpi
+    network_mode: bridge
+    user: "1000:1000"
+    command: ["--hosts", "/tmp/hosts.txt", "-d1", "-s1+s", "-d3+s", "-s6+s", "-d9+s", "-s12+s", "-d15+s", "-s20+s", "-d25+s", "-s30+s", "-d35+s", "-a1"]
+    healthcheck:
+      test: ["CMD-SHELL", "wget --proxy=socks5://localhost:1080 --timeout=10 -q -O - https://www.google.com > /dev/null && echo 'Health check passed' || exit 1"]
+      interval: 65s
+      timeout: 15s
+      start_period: 30s
+      retries: 3
+    ports:
+      - "{{ BYE_SOCS_PORT }}:1080"
+    volumes:
+      - {{ FILES_DIR }}/hosts.txt:/tmp/hosts.txt:ro
+    restart: unless-stopped

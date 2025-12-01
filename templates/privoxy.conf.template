@@ -1,0 +1,3 @@
+listen-address 0.0.0.0:{{ HTTP_PROXY_PORT }}
+forward-socks5 / 127.0.0.1:{{ BYE_SOCS_PORT }} .
+debug 4096

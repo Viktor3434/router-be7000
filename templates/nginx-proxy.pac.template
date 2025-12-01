@@ -1,0 +1,3 @@
+function FindProxyForURL(url, host) {
+    return "PROXY {{ HTTP_PROXY_IP_ADDR }}:{{ HTTP_PROXY_PORT }}; DIRECT";
+}
