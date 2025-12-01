@@ -58,3 +58,6 @@ Client Device
 │ └─────────┘   └─────────────┘   └─────────────┘     │
 └─────────────────────────────────────────────────────┘
 ```
+
+## P.S.:
+A selection of DPI commands can be found in an excellent Android app. [romanvht/ByeByeDPI](https://github.com/romanvht/ByeByeDPI)
