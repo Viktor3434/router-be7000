@@ -24,8 +24,8 @@ services:
     command: -c "privoxy --no-daemon /etc/privoxy/config.used"
     healthcheck:
       test: ["CMD", "sh", "-c", "wget --proxy=http://localhost:{{ HTTP_PROXY_PORT }} --timeout=10 -q -O - https://www.google.com > /dev/null || exit 1"]
-      interval: 40s
-      timeout: 10s
+      interval: 42s
+      timeout: 15s
       start_period: 30s
       retries: 3
     volumes:
@@ -39,8 +39,8 @@ services:
     user: "1000:1000"
     command: ["--hosts", "/tmp/hosts.txt", "-d1", "-s1+s", "-d3+s", "-s6+s", "-d9+s", "-s12+s", "-d15+s", "-s20+s", "-d25+s", "-s30+s", "-d35+s", "-a1"]
     healthcheck:
-      test: ["CMD-SHELL", "wget --proxy=socks5://localhost:1080 --timeout=10 -q -O - https://www.google.com > /dev/null && echo 'Health check passed' || exit 1"]
-      interval: 65s
+      test: ["CMD-SHELL", "wget --proxy=socks5://localhost:1080 --timeout=10 -q -O - https://www.google.com > /dev/null || exit 1"]
+      interval: 45s
       timeout: 15s
       start_period: 30s
       retries: 3
