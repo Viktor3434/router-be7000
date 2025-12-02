@@ -155,8 +155,9 @@ main() {
     ###
     # Step 3
     ###
-    download_file $REPO_URL/files/hosts.txt      $FILES_DIR
-    download_file $REPO_URL/files/nginx-pac.conf $FILES_DIR
+    download_file $REPO_URL/files/hosts.txt        $FILES_DIR
+    download_file $REPO_URL/files/nginx-pac.conf   $FILES_DIR
+    download_file $REPO_URL/files/byedpi-args.conf $FILES_DIR
 
     download_file $REPO_URL/scripts/change-opa-policy.sh       $SCRIPTS_DIR
     download_file $REPO_URL/scripts/create-alias.sh            $SCRIPTS_DIR
