@@ -37,7 +37,9 @@ services:
     container_name: byedpi
     network_mode: bridge
     user: "1000:1000"
-    command: ["--hosts", "/tmp/hosts.txt", "-d1", "-s1+s", "-d3+s", "-s6+s", "-d9+s", "-s12+s", "-d15+s", "-s20+s", "-d25+s", "-s30+s", "-d35+s", "-a1"]
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - exec /opt/byedpi/ciadpi --hosts /tmp/hosts.txt $(cat /tmp/byedpi-args.conf | tr '\n' ' ')
     healthcheck:
       test: ["CMD-SHELL", "wget --proxy=socks5://localhost:1080 --timeout=10 -q -O - https://www.google.com > /dev/null || exit 1"]
       interval: 45s
@@ -47,5 +49,6 @@ services:
     ports:
       - "{{ BYE_SOCS_PORT }}:1080"
     volumes:
+      - {{ FILES_DIR }}/byedpi-args.conf:/tmp/byedpi-args.conf:ro
       - {{ FILES_DIR }}/hosts.txt:/tmp/hosts.txt:ro
     restart: unless-stopped
